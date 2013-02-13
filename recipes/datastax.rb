@@ -27,21 +27,45 @@ apt_repository "datastax" do
   distribution "stable"
   components   ["main"]
   key          "http://debian.datastax.com/debian/repo_key"
-
   action :add
 end
 
 # DataStax Server Community Edition package will not install w/o this
-# one installed. MK.
 package "python-cql" do
   action :install
 end
 
-package "dsc" do
+package "dsc12" do
+  action :install
+end
+
+package "opscenter-free" do
   action :install
 end
 
 service "cassandra" do
   supports :restart => true, :status => true
   action [:enable, :start]
+end
+
+# The package starts the cassandra service before the cookbook sets the config
+# file in place. A different cluster name will prevent cassandra from restarting.
+# Since this is the first run, wipe the data.
+path_to_prevent_file = File.join(node.cassandra.conf_dir, "prevent_data_deletion")
+execute "clear-data-after-package-install" do
+  command "rm -rf /var/lib/cassandra/*"
+  notifies :create, "file[#{path_to_prevent_file}]", :immediately
+  not_if {File.exists?(path_to_prevent_file)}
+end
+
+file "#{path_to_prevent_file}" do
+  action :touch
+end
+
+template File.join(node.cassandra.conf_dir, "cassandra.yaml") do
+  source "cassandra.yaml.erb"
+  owner node.cassandra.user
+  group node.cassandra.user
+  mode  0644
+  notifies :restart, "service[cassandra]"
 end

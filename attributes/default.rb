@@ -1,30 +1,23 @@
-cassandra_version = "1.2.1"
+# Cluster and network configuration
+default[:cassandra][:cluster_name] = "Test Cluster"
+default[:cassandra][:seeds] = "127.0.0.1"
+default[:cassandra][:listen_address] = "localhost"
+default[:cassandra][:rpc_address] = "localhost"
 
-default[:cassandra] = {
-  :cluster_name => "Test Cluster",
-  :initial_token => "",
-  :seeds => "127.0.0.1",
-  :version => cassandra_version,
-  :tarball => {
-    :url => "http://www.eu.apache.org/dist/cassandra/#{cassandra_version}/apache-cassandra-#{cassandra_version}-bin.tar.gz",
-    :md5 => "bca870d48906172eb69ad60913934aee"
-  },
-  :user => "cassandra",
-  :jvm  => {
-    :xms => 32,
-    :xmx => 512
-  },
-  :limits => {
-    :memlock => 'unlimited',
-    :nofile  => 48000
-  },
-  :installation_dir => "/usr/local/cassandra",
-  :bin_dir          => "/usr/local/cassandra/bin",
-  :lib_dir          => "/usr/local/cassandra/lib",
-  :conf_dir         => "/etc/cassandra/",
-  # commit log, data directory, saved caches and so on are all stored under the data root. MK.
-  :data_root_dir    => "/var/lib/cassandra/",
-  :log_dir          => "/var/log/cassandra/",
-  :listen_address   => "localhost",
-  :rpc_address      => "localhost"
-}
+# Misc attributes that apply to tarball and package installation
+default[:cassandra][:user] = "cassandra"
+default[:cassandra][:jvm][:xms] = 32
+default[:cassandra][:jvm][:xmx] = 512
+default[:cassandra][:limits][:memlock] = "unlimited"
+default[:cassandra][:limits][:nofile] = 48000
+default[:cassandra][:conf_dir] = "/etc/cassandra"
+
+# Attributes that only apply to the tarball recipe
+default[:cassandra][:tarball][:version] = "1.2.1"
+default[:cassandra][:tarball][:url] = "http://www.eu.apache.org/dist/cassandra/#{node[:cassandra][:tarball][:url]}/apache-cassandra-#{node[:cassandra][:tarball][:version]}-bin.tar.gz"
+default[:cassandra][:tarball][:md5] = "bca870d48906172eb69ad60913934aee"
+default[:cassandra][:tarball][:installation_dir] = "/usr/local/cassandra"
+default[:cassandra][:tarball][:bin_dir] = "/usr/local/cassandra/bin"
+default[:cassandra][:tarball][:lib_dir] = "/usr/local/cassandra/lib"
+default[:cassandra][:tarball][:data_root_dir] = "/var/lib/cassandra/"
+default[:cassandra][:tarball][:log_dir] = "/var/log/cassandra/"
