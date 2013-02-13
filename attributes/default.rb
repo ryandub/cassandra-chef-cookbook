@@ -12,6 +12,9 @@ default[:cassandra][:limits][:memlock] = "unlimited"
 default[:cassandra][:limits][:nofile] = 48000
 default[:cassandra][:conf_dir] = "/etc/cassandra"
 
+# Opscenterd attributes
+default[:cassandra][:opscenterd][:listen] = '127.0.0.1'
+
 # Attributes that only apply to the tarball recipe
 default[:cassandra][:tarball][:version] = "1.2.1"
 default[:cassandra][:tarball][:url] = "http://www.eu.apache.org/dist/cassandra/#{node[:cassandra][:tarball][:url]}/apache-cassandra-#{node[:cassandra][:tarball][:version]}-bin.tar.gz"

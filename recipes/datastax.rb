@@ -39,10 +39,6 @@ package "dsc12" do
   action :install
 end
 
-package "opscenter-free" do
-  action :install
-end
-
 service "cassandra" do
   supports :restart => true, :status => true
   action [:enable, :start]
@@ -69,3 +65,4 @@ template File.join(node.cassandra.conf_dir, "cassandra.yaml") do
   mode  0644
   notifies :restart, "service[cassandra]"
 end
+
