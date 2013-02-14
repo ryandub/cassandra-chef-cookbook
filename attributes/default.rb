@@ -3,6 +3,7 @@ default[:cassandra][:cluster_name] = "Test Cluster"
 default[:cassandra][:seeds] = "127.0.0.1"
 default[:cassandra][:listen_address] = "localhost"
 default[:cassandra][:rpc_address] = "localhost"
+default[:cassandra][:listen_interface] = "lo"
 
 # Misc attributes that apply to tarball and package installation
 default[:cassandra][:user] = "cassandra"
